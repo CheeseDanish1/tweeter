@@ -33,11 +33,27 @@ export async function getAllPosts() {
   });
 }
 
-export async function createPost({ content }) {
+const getCircularReplacer = () => {
+  const seen = new WeakSet();
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+};
+
+export async function createPost({ content, socket }) {
   return axios({
     url: `${SERVER_URL}/api/posts`,
     method: "POST",
     withCredentials: true,
-    data: { content },
+    data: {
+      content,
+      socket: JSON.parse(JSON.stringify(socket, getCircularReplacer())),
+    },
   });
 }

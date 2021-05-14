@@ -4,17 +4,24 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Home from "./components/Home";
 import { getUser } from "./utils/api";
+import getSocket from "./utils/socket.io";
 
 function App() {
   const [user, setUser] = React.useState(null);
+  const [socket, setSocket] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     getUser().then(({ data }) => {
       setUser(data?.user);
+      const soc = getSocket();
+      setSocket(soc);
+      setLoading(false);
     });
   }, []);
-  console.log(user);
-  return (
+  return loading ? (
+    <div>Loading</div>
+  ) : (
     <div className="App">
       <Switch>
         <Route path="/login" exact={true}>
@@ -24,7 +31,7 @@ function App() {
           <Signup setUser={setUser} user={user} />
         </Route>
         <Route path="/home" exact={true}>
-          <Home user={user} />
+          <Home user={user} socket={socket} />
         </Route>
       </Switch>
       {/* <header className="App-header">
