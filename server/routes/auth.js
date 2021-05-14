@@ -11,21 +11,16 @@ router.post("/local/signup", async (req, res) => {
       message: "You must provide a username and a password",
       error: true,
     });
-  console.log(1);
   const oldUser = await User.findOne({ username });
   if (oldUser)
     return res
       .status(200)
       .send({ error: true, message: "User already exists" });
-  console.log(2);
   const encryptedPassword = encrypt(password);
-  console.log(3);
   const user = {
     ...(await User.create({ username, password: encryptedPassword })),
   }._doc;
-  console.log(4);
   const encryptedUser = encryptData(user, "1w");
-  console.log(5);
   return res
     .status(200)
     .cookie(COOKIE_NAME, encryptedUser, { httpOnly: true })

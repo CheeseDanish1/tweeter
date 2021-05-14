@@ -32,8 +32,9 @@ export default function Home({ user }) {
       </form>
       <div className="posts">
         {posts.map((p) => (
-          <p>
-            <bold>{p.author.username}</bold>: {p.content}
+          <p key={p.id}>
+            <b>{p.author.id === user.id ? "You" : p.author.username}</b>:{" "}
+            {p.content}
           </p>
         ))}
       </div>

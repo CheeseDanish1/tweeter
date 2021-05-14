@@ -3,11 +3,7 @@ module.exports.user = (user) => {
   return { username: user.username, id: user._id };
 };
 
-module.exports.post = (post) => {
-  if (!post) return null;
-  const temp = post;
-  const doc = post._doc;
-  delete doc._id;
-  delete doc.__v;
-  return { ...doc, id: temp._id };
+module.exports.post = ({ author, content, uploaded, _id }) => {
+  if (!author || !content || !uploaded || !_id) return null;
+  return { author, content, uploaded, id: _id };
 };

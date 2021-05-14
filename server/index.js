@@ -21,7 +21,7 @@ app.use(cookieParser());
 const { decryptData } = require("./utils/crypt");
 const COOKIE_NAME = "authorization";
 app.use(function (req, res, next) {
-  const cookie = req.cookies[COOKIE_NAME];
+  const cookie = req.cookies[COOKIE_NAME] || req.headers[COOKIE_NAME];
   if (!cookie) return noUser();
   const data = decryptData(cookie);
   if (!data) noUser();
@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 
 app.use(
   cors({
-    origin: ["https://stackoverflow.com", "http://localhost:3000"],
+    origin: true,
     credentials: true,
   })
 );
