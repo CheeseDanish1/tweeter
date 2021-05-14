@@ -2,7 +2,6 @@ import React from "react";
 
 export default function Post({ post, user }) {
   const isAuthor = post.author.id === user.id;
-  console.log(isAuthor);
   return (
     <>
       <div className="post">

@@ -2,7 +2,7 @@ const route = require("express").Router();
 const PostConfig = require("../database/models/PostConfig");
 const serialize = require("../utils/serialize");
 
-route.post("/posts", async (req, res) => {
+route.post("/", async (req, res) => {
   if (!req.user) return res.status(401).send({ message: "Unauthorized" });
   const { content, socket } = req.body;
   if (!content)
@@ -23,24 +23,21 @@ route.post("/posts", async (req, res) => {
     );
 });
 
-route.get("/posts", async (req, res) => {
+route.get("/", async (req, res) => {
   if (!req.user) return res.status(401).send({ message: "Unauthorized" });
 
   if (req.query.id) {
     return res.send(await getPostById());
   } else if (req.query.author) {
-    return res.send(
-      serialize.post(
-        await PostConfig.find({ "author.id": req.query.author })
-      ) || {}
-    );
+    const allPosts = await PostConfig.find({ "author.id": req.query.author })
+    return res.send(allPosts.map(p => serialize.post(p)));
   }
   return res.send((await PostConfig.find({})).map(serialize.post));
 });
 
 async function getPostById(req) {
   try {
-    return serialize.post(await PostConfig.find({ _id: req.query.id }));
+    return serialize.post(await PostConfig.findOne({ _id: req.query.id }));
   } catch (err) {
     return {};
   }

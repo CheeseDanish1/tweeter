@@ -1,6 +1,6 @@
 import React from "react";
 import { login } from "../utils/api";
-import { Redirect } from "react-router-dom";
+import { Redirect,Link } from "react-router-dom";
 
 export default function Login({ user, setUser }) {
   const [error, setError] = React.useState(null);
@@ -29,6 +29,7 @@ export default function Login({ user, setUser }) {
         <input required type="password" placeholder="password" />
         <br />
         <button type="submit">Submit</button>
+        <p><Link to ="/signup">Signup</Link></p>
         {error && <p>{error}</p>}
       </form>
     </div>

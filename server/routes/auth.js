@@ -27,6 +27,12 @@ router.post("/local/signup", async (req, res) => {
     .send({ user: serialize.user(user), message: "Successfully signed up!" });
 });
 
+router.post("/local/logout", async (req, res) => {
+  if (!req.user) return res.send({message: "Unauthorized"})
+
+  res.status(200).clearCookie(COOKIE_NAME).send({ message: "Logout Success"})
+});
+
 router.post("/local/login", async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -51,18 +57,6 @@ router.post("/local/login", async (req, res) => {
         user: serialize.user(oldUser),
       });
   return res.send({ message: "Incorect password", error: true });
-
-  // const encryptedPassword = encrypt(password);
-  // const user = {
-  //   ...(await User.create({ username, password: encryptedPassword })),
-  // }._doc;
-  // const encryptedUser = encryptData(user, "1w");
-  // return res
-  //   .cookie(COOKIE_NAME, encryptedUser, { httpOnly: true })
-  //   .send(
-  //     { user: serialize.user(user) },
-  //     { message: "Successfully signed up!" }
-  //   );
 });
 
 module.exports = router;

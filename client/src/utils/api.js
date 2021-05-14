@@ -7,6 +7,14 @@ export async function getUser() {
   });
 }
 
+export async function logout() {
+  return axios({
+    url: `${SERVER_URL}/auth/local/logout`,
+    method: "POST",
+    withCredentials: true,
+  });
+}
+
 export async function login({ password, username }) {
   return axios({
     url: `${SERVER_URL}/auth/local/login`,
@@ -22,6 +30,22 @@ export async function signup({ password, username }) {
     method: "POST",
     withCredentials: true,
     data: { password, username },
+  });
+}
+
+export async function getUserById(id) {
+  return axios({
+    url: `${SERVER_URL}/api/user/${id}`,
+    method: "GET",
+    withCredentials: true,
+  });
+}
+
+export async function getPostsByUser(user){
+  return axios({
+    url: `${SERVER_URL}/api/posts?author=${user.id}`,
+    method: "GET",
+    withCredentials: true,
   });
 }
 

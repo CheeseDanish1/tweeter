@@ -1,8 +1,9 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Home from "./components/Home";
+import User from "./components/User";
 import { getUser } from "./utils/api";
 import getSocket from "./utils/socket.io";
 
@@ -31,8 +32,12 @@ function App() {
           <Signup setUser={setUser} user={user} />
         </Route>
         <Route path="/home" exact={true}>
-          <Home user={user} socket={socket} />
+          <Home user={user} setUser={setUser} socket={socket} />
         </Route>
+        <Route path="/user/:id" exact={true}>
+          <User user={user} socket={socket} />
+        </Route>
+        <Redirect to="/home" />
       </Switch>
       {/* <header className="App-header">
         <p>
